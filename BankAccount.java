@@ -35,13 +35,17 @@ public class BankAccount {
     }
 
     public void deposit(double amount) throws NegativeDepositException, InvalidAccountOperationException {
-        if (amount > 0) {
-            balance += amount;
-        } else {
-            throw new NegativeDepositException("Deposit amount must be greater than 0");
-        }
+        if (isActive) {
+            if (amount > 0) {
+                balance += amount;
+            } else {
+                throw new NegativeDepositException("Deposit amount must be greater than 0");
+            }
 
-        System.out.println("Deposit successful! New balance: $" + getAccountBalance()); 
+            System.out.println("Deposit successful! New balance: $" + getAccountBalance()); 
+        } else {
+            throw new InvalidAccountOperationException("Account is closed!");
+        }
     }
 
     public void withdraw(double amount) throws OverdrawException, InvalidAccountOperationException {
@@ -68,6 +72,10 @@ public class BankAccount {
         } else {
             throw new InvalidAccountOperationException("Account is closed!");
         }
+    }
+
+    public void closeAccount() {
+        isActive = false; // Sets status to false preventing use of account functions. 
     }
 
 }

@@ -98,9 +98,12 @@ public class BankProgram {
                     } catch (InputMismatchException e) { // Handling for non numeric values
                         System.out.println("Invalid Input... Please try again.");
                         input.nextLine();
+                    } catch (NegativeDepositException | InvalidAccountOperationException e) {
+                        System.out.println("Error! Error: " + e);
                     }
 
                     break;
+
 
                 case 3: // Withdraw
 
@@ -116,7 +119,9 @@ public class BankProgram {
                     } catch (InputMismatchException e) { // Handling for non numeric values
                         System.out.println("Invalid Input... Please try again.");
                         input.nextLine();
-                    }         
+                    } catch (OverdrawException | InvalidAccountOperationException e) {
+                        System.out.println("Error! Error: " + e);
+                    }        
                     
                     break;
 
@@ -127,7 +132,12 @@ public class BankProgram {
                         System.out.println("\nPlease create an account first!\n");
                         break;
                     }
-                    userAccount.displayBalance();
+                    
+                    try {
+                        userAccount.displayBalance();
+                    } catch (InvalidAccountOperationException e) {
+                        System.out.println("Error! Error: " + e);
+                    }
                     
                     break;
 
