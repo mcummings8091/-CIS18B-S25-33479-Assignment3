@@ -1,3 +1,3 @@
-public class NegativeDepositException {
-    
+public class NegativeDepositException extends Exception {
+
 }
