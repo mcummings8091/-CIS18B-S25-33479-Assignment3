@@ -11,12 +11,12 @@ public class BankProgram {
         }
     }
 
-    public static int displayMenu(boolean accountCreated) { // Method to handle repeated menu display to user
+    public static int displayMenu(BankAccount account) { // Method to handle repeated menu display to user
         Scanner input = new Scanner(System.in);
         int choice = 0;
 
         do { 
-            if (!accountCreated) { // If the user hasn't created an account display full menu
+            if (!account.getAccountStatus()) { // If the user hasn't created an account display full menu
             System.out.println("1. Create Account");
             System.out.println("2. Deposit Money");
             System.out.println("3. Withdraw Money");
@@ -31,7 +31,7 @@ public class BankProgram {
             System.out.print("\nEnter your choice: ");
             
             try {
-                if (accountCreated) {
+                if (account.getAccountStatus()) {
                 choice = input.nextInt() + 1; // Adjustment to input value to account for lack of original option1 "create account"
                 } else {
                     choice = input.nextInt();
@@ -50,9 +50,9 @@ public class BankProgram {
     }
 
     public static void main(String[] args) {
-        boolean accountCreated = false; // variable to determine if an account has been created. 
         int userChoice; // Variable for managing user choice
         BankAccount userAccount = new BankAccount(); // Blank BankAccount instance to be filled when user uses "1.) Create Account"
+        double transactionAmount = 0;
 
         Scanner input = new Scanner(System.in);
 
@@ -60,34 +60,35 @@ public class BankProgram {
 
         do { 
             
-            userChoice = displayMenu(accountCreated);
+            userChoice = displayMenu(userAccount);
 
             switch (userChoice) {
                 case 1: //  Create Account
+                    userAccount.activateAccount();
 
-                    // try-catch for handling for non numeric values
-                    try {
+                    // try-catch & do-while for handling for non valid values
+                     while (transactionAmount <= 0) {
+                        try {
+                            System.out.print("Enter account holder name: ");
+                            userAccount.setAccountName(input.nextLine());
 
-                        System.out.print("Enter account holder name: ");
-                        userAccount.setAccountName(input.nextLine());
+                            System.out.print("Enter initial deposit: ");
+                            transactionAmount = input.nextDouble();
+                            userAccount.setAccountBalance(transactionAmount);
 
-                        System.out.print("Enter initial deposit: ");
-                        userAccount.setAccountBalance(input.nextDouble());
-
-                    } catch (InputMismatchException e) { 
-                        System.out.println("Invalid Input... Please try again.");
-                        input.nextLine();
-                    }
+                        } catch (InputMismatchException | NegativeDepositException e) { 
+                            System.out.println("Invalid Input... Please try again. Error: " + e);
+                            input.nextLine();
+                        }
+                     }
 
                     System.out.println("\nAccount created successfully!");
-
-                    accountCreated = true;
                     break;
 
                 case 2: // Deposit Money
 
                     // Prevent user from option before account creation
-                    if (!accountCreated){
+                    if (!userAccount.getAccountStatus()){
                         System.out.println("\nPlease create an account first!\n");
                         break;
                     }
@@ -108,7 +109,7 @@ public class BankProgram {
                 case 3: // Withdraw
 
                     // Prevent user from option before account creation
-                    if (!accountCreated){
+                    if (!userAccount.getAccountStatus()){
                         System.out.println("\nPlease create an account first!\n");
                         break;
                     }
@@ -128,11 +129,11 @@ public class BankProgram {
                 case 4: // Check Balance
 
                     // Prevent user from option before account creation
-                    if (!accountCreated){
+                    if (!userAccount.getAccountStatus()){
                         System.out.println("\nPlease create an account first!\n");
                         break;
                     }
-                    
+
                     try {
                         userAccount.displayBalance();
                     } catch (InvalidAccountOperationException e) {

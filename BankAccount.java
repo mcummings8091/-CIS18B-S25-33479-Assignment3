@@ -8,7 +8,6 @@ public class BankAccount {
         accountHolderName = "";
         accountNumber = 0;
         balance = 0.0;
-        isActive = true;
     }
 
     public BankAccount(String holderName, double initialDeposit) {
@@ -18,12 +17,19 @@ public class BankAccount {
     }
 
 
+    //Getters & Setters
     public void setAccountName(String holderName) {
         accountHolderName = holderName;
     }
 
-    public void setAccountBalance(double amount) {
-        balance = amount;
+    public void setAccountBalance(double amount) throws NegativeDepositException {
+        if(isActive) {
+            if (amount > 0) {
+                balance = amount;
+            } else {
+                throw new NegativeDepositException("Initial deposit amount must be greater than 0");
+            }
+        }
     }
 
     public String getAccountName() {
@@ -34,6 +40,14 @@ public class BankAccount {
         return balance;
     }
 
+    public boolean getAccountStatus() {
+        if (isActive) {
+            return true;
+        }
+        return false;
+    }
+
+    // Procedures 
     public void deposit(double amount) throws NegativeDepositException, InvalidAccountOperationException {
         if (isActive) {
             if (amount > 0) {
@@ -77,6 +91,9 @@ public class BankAccount {
     public void closeAccount() {
         isActive = false; // Sets status to false preventing use of account functions. 
     }
-
+    
+    public void activateAccount() {
+        isActive = true;
+    }
 }
 
