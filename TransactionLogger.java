@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
+//Concrete subject
 class TransactionLogger implements Subject {
-    private ArrayList<Observer> observers = new ArrayList();
+    private ArrayList<Observer> observers = new ArrayList<>();
     private String transactionLog;
 
 

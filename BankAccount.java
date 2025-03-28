@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class BankAccount {
     private String accountHolderName;
@@ -6,17 +5,29 @@ public class BankAccount {
     private double balance;
     private boolean isActive;
 
-    private ArrayList<Observer> observers = new ArrayList();
+    private TransactionLogger transactionLogger;
+
+
     public BankAccount() {
         accountHolderName = "";
         accountNumber = 0;
         balance = 0.0;
+
+        //Create and add transaction observer
+        transactionLogger = new TransactionLogger();
+        Observer transactionObserver = new TransactionObserver();
+        transactionLogger.addObserver(transactionObserver);
     }
 
     public BankAccount(String holderName, double initialDeposit) {
         accountHolderName = holderName;
         balance = initialDeposit;
         isActive = true;
+
+        //Create and add transaction observer
+        transactionLogger = new TransactionLogger();
+        Observer transactionObserver = new TransactionObserver();
+        transactionLogger.addObserver(transactionObserver);
     }
 
 
@@ -29,6 +40,7 @@ public class BankAccount {
         if(isActive) {
             if (amount > 0) {
                 balance = amount;
+                transactionLogger.setTransactionLog("Initial deposit: $" + getAccountBalance());
             } else {
                 throw new NegativeDepositException("Initial deposit amount must be greater than 0");
             }
@@ -55,6 +67,7 @@ public class BankAccount {
         if (isActive) {
             if (amount > 0) {
                 balance += amount;
+                transactionLogger.setTransactionLog("Deposit: $" + amount);
             } else {
                 throw new NegativeDepositException("Deposit amount must be greater than 0");
             }
@@ -69,6 +82,7 @@ public class BankAccount {
         if (isActive) {
              if (balance > amount) {
                 balance -= amount;
+                transactionLogger.setTransactionLog("Withdrawl: $" + amount);
                 System.out.println(amount + " withdrawn successfully! New balance: $" + getAccountBalance());
             } else if (amount > balance) {
                 throw new OverdrawException("Current withdrawl attempt will overdraw the account.");  
@@ -99,10 +113,5 @@ public class BankAccount {
         isActive = true;
     }
 
-    public void addObserver(Observer observer) {
-        if (isActive) {
-            observers.add(observer);
-        }
-    }
 }
 
