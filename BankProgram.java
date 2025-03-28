@@ -43,6 +43,7 @@ public class BankProgram {
             } 
         } while (!isValidInput(1, 5, choice));
 
+        input.close();
         return choice;
     }
 
@@ -150,8 +151,7 @@ public class BankProgram {
         } while (userChoice != 5);
         
         System.out.println("Thank you for using Simple Bank System!");
-
-
+        input.close();
 
     }
 }
