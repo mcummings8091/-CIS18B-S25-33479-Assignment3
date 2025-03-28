@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 public class BankAccount {
     private String accountHolderName;
     private int accountNumber; // Needs RNG implementation
     private double balance;
     private boolean isActive;
 
+    private ArrayList<Observer> observers = new ArrayList();
     public BankAccount() {
         accountHolderName = "";
         accountNumber = 0;
@@ -94,6 +97,12 @@ public class BankAccount {
     
     public void activateAccount() {
         isActive = true;
+    }
+
+    public void addObserver(Observer observer) {
+        if (isActive) {
+            observers.add(observer);
+        }
     }
 }
 

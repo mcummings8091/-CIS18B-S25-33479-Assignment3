@@ -4,11 +4,8 @@ import java.util.Scanner;
 public class BankProgram {
 
     public static boolean isValidInput(int min, int max, int input) { // Method for simple input validation
-        if (input >= min && input <= max) { // If input is withing range of min & max, inclusive
-            return true;
-        } else {
-            return false;
-        }
+
+        return input >= min && input <= max; // If input is withing range of min & max, inclusive
     }
 
     public static int displayMenu(BankAccount account) { // Method to handle repeated menu display to user

@@ -1,17 +1,30 @@
 import java.util.ArrayList;
 
-class TransactionLogger {
-    private ArrayList<BankAccount> monitoredAccounts;
+class TransactionLogger implements Subject {
+    private ArrayList<Observer> observers = new ArrayList();
+    private String transactionLog;
 
-    public void addAccount(BankAccount account)  {
-        monitoredAccounts.add(account);
+
+    public void setTransactionLog(String transactionInfo) {
+        transactionLog = transactionInfo;
+        notifyObservers();
     }
 
-    public void removeAccount(BankAccount account) {
-        monitoredAccounts.remove(account);
+    @Override
+    public void addObserver(Observer observer)  {
+        observers.add(observer);
     }
 
-    public void noitifyAccount(ArrayList<BankAccount> monitoredAccounts) {
-        
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
     }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(transactionLog);
+        }
+    }
+
 }
